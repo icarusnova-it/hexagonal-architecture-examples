@@ -1,0 +1,51 @@
+graph TB
+    subgraph "External World"
+        REST[REST API]
+        CLI[CLI]
+        DB[(Database)]
+        Payment[Payment Service]
+    end
+    
+    subgraph "Adapters Layer"
+        RESTAdapter[REST Adapter]
+        CLIAdapter[CLI Adapter]
+        DBAdapter[DB Adapter]
+        PaymentAdapter[Payment Adapter]
+    end
+    
+    subgraph "Application Layer"
+        UseCase[PlaceOrder Use Case]
+        InboundPort[Inbound Port]
+        OutboundPort1[OrderRepository Port]
+        OutboundPort2[PaymentGateway Port]
+    end
+    
+    subgraph "Domain Layer"
+        Order[Order Entity]
+        Money[Money Value Object]
+    end
+    
+    REST --> RESTAdapter
+    CLI --> CLIAdapter
+    RESTAdapter --> InboundPort
+    CLIAdapter --> InboundPort
+    InboundPort --> UseCase
+    UseCase --> OutboundPort1
+    UseCase --> OutboundPort2
+    UseCase --> Order
+    UseCase --> Money
+    OutboundPort1 --> DBAdapter
+    OutboundPort2 --> PaymentAdapter
+    DBAdapter --> DB
+    PaymentAdapter --> Payment
+    
+    style Order fill:#e1f5ff
+    style Money fill:#e1f5ff
+    style UseCase fill:#fff4e1
+    style InboundPort fill:#fff4e1
+    style OutboundPort1 fill:#fff4e1
+    style OutboundPort2 fill:#fff4e1
+    style RESTAdapter fill:#ffe1e1
+    style CLIAdapter fill:#ffe1e1
+    style DBAdapter fill:#ffe1e1
+    style PaymentAdapter fill:#ffe1e1
